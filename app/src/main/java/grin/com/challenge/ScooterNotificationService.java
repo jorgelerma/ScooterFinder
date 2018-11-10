@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.callbacks.SubscribeCallback;
@@ -16,6 +17,8 @@ import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 
 import java.util.Arrays;
+
+import grin.com.challenge.models.Scooter;
 
 
 public class ScooterNotificationService extends Service {
@@ -115,8 +118,14 @@ public class ScooterNotificationService extends Service {
                 public void message(PubNub pubnub, PNMessageResult message) {
                     if (message.getChannel() != null) {
                         Log.v(TAG, "New Message: " + message.getMessage());
-                        // Message has been received on channel group stored in
-                        // message.getChannel()
+
+                        Gson gson = new Gson();
+                        Scooter scooter = gson.fromJson(message.getMessage(), Scooter.class);
+
+                        Intent broadcastIntent = new Intent();
+                        broadcastIntent.putExtra(EXTRA_SCOOTER, scooter);
+                        broadcastIntent.setAction(ACTION_NEW_SCOOTER);
+                        sendBroadcast(broadcastIntent);
                     } else {
                         // Message has been received on channel stored in
                         // message.getSubscription()
