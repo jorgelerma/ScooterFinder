@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         getToken();
 
-        ScooterNotificationService.setEnabled(this, true);
+        PubnubReceiver.setAlarmState(this, true);
     }
 
 
@@ -70,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(newScooterReceiver);
-
-        ScooterNotificationService.setEnabled(this, false);
     }
 
 

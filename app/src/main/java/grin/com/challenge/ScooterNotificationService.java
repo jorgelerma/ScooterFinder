@@ -23,7 +23,7 @@ import grin.com.challenge.models.Scooter;
 
 public class ScooterNotificationService extends Service {
 
-    private static final String TAG = "CHALLENGE";
+    private static final String TAG = "CHALLENGE_EXTERNAL";
     private static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-2b9f3e2a-e4c1-11e8-a679-1679df73129d";
     private static final int NOTIFICATION_ID = 93845;
 
@@ -60,6 +60,9 @@ public class ScooterNotificationService extends Service {
             PNConfiguration pnConfiguration = new PNConfiguration();
             pnConfiguration.setSubscribeKey(PUBNUB_SUBSCRIBE_KEY);
             mPubnub = new PubNub(pnConfiguration);
+        } else {
+            mPubnub.removeListener(mSubscribeCallback);
+
         }
         Log.v(TAG, "Hash " + mPubnub.hashCode());
         subscribeToNotificationProvider(getApplicationContext(), "channel_1");
@@ -82,6 +85,7 @@ public class ScooterNotificationService extends Service {
     public void onDestroy() {
         super.onDestroy();
         mPubnub.unsubscribeAll();
+        mPubnub.removeListener(mSubscribeCallback);
         stopForeground(true);
     }
 
@@ -99,44 +103,47 @@ public class ScooterNotificationService extends Service {
     }
 
 
+    private SubscribeCallback mSubscribeCallback = new SubscribeCallback() {
+        @Override
+        public void status(PubNub pubnub, PNStatus status) {
+            if (status.getCategory() == PNStatusCategory.PNUnexpectedDisconnectCategory) {
+                Log.v(TAG, "Connectivity Lost");
+            } else if (status.getCategory() == PNStatusCategory.PNConnectedCategory) {
+                Log.v(TAG, "Connected");
+            } else if (status.getCategory() == PNStatusCategory.PNReconnectedCategory) {
+                Log.v(TAG, "Reconnected");
+            } else if (status.getCategory() == PNStatusCategory.PNDecryptionErrorCategory) {
+                Log.v(TAG, "Decryption Error");
+            }
+        }
+
+        @Override
+        public void message(PubNub pubnub, PNMessageResult message) {
+            if (message.getChannel() != null) {
+                Log.v(TAG, "New Message: " + message.getMessage());
+
+                Gson gson = new Gson();
+                Scooter scooter = gson.fromJson(message.getMessage(), Scooter.class);
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.putExtra(EXTRA_SCOOTER, scooter);
+                broadcastIntent.setAction(ACTION_NEW_SCOOTER);
+                sendBroadcast(broadcastIntent);
+            } else {
+                // Message has been received on channel stored in
+                // message.getSubscription()
+            }
+        }
+
+        @Override
+        public void presence(PubNub pubnub, PNPresenceEventResult presence) {
+
+        }
+    };
+
+
     private void subscribeToNotificationProvider(final Context ctx, String channel) {
-            mPubnub.addListener(new SubscribeCallback() {
-                @Override
-                public void status(PubNub pubnub, PNStatus status) {
-                    if (status.getCategory() == PNStatusCategory.PNUnexpectedDisconnectCategory) {
-                        Log.v(TAG, "Connectivity Lost");
-                    } else if (status.getCategory() == PNStatusCategory.PNConnectedCategory) {
-                        Log.v(TAG, "Connected");
-                    } else if (status.getCategory() == PNStatusCategory.PNReconnectedCategory) {
-                        Log.v(TAG, "Reconnected");
-                    } else if (status.getCategory() == PNStatusCategory.PNDecryptionErrorCategory) {
-                        Log.v(TAG, "Decryption Error");
-                    }
-                }
-
-                @Override
-                public void message(PubNub pubnub, PNMessageResult message) {
-                    if (message.getChannel() != null) {
-                        Log.v(TAG, "New Message: " + message.getMessage());
-
-                        Gson gson = new Gson();
-                        Scooter scooter = gson.fromJson(message.getMessage(), Scooter.class);
-
-                        Intent broadcastIntent = new Intent();
-                        broadcastIntent.putExtra(EXTRA_SCOOTER, scooter);
-                        broadcastIntent.setAction(ACTION_NEW_SCOOTER);
-                        sendBroadcast(broadcastIntent);
-                    } else {
-                        // Message has been received on channel stored in
-                        // message.getSubscription()
-                    }
-                }
-
-                @Override
-                public void presence(PubNub pubnub, PNPresenceEventResult presence) {
-
-                }
-            });
+            mPubnub.addListener(mSubscribeCallback);
             mPubnub.subscribe().channels(Arrays.asList(channel)).execute();
     }
 
