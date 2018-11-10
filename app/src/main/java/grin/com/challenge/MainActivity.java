@@ -7,8 +7,13 @@ import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,13 +21,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import grin.com.challenge.adapters.ScooterListAdapter;
 import grin.com.challenge.models.Scooter;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText mEditToken;
-
+    private TextView mTextWaiting;
+    private RecyclerView mRecyclerScooters;
+    private ScooterListAdapter mAdapter;
 
     protected BroadcastReceiver newScooterReceiver = new BroadcastReceiver() {
         @Override
@@ -38,12 +45,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mEditToken = findViewById(R.id.edit_token);
+        mTextWaiting = findViewById(R.id.text_waiting);
+        mRecyclerScooters = findViewById(R.id.recycler_scooters);
 
         // Subscribe to new Scooter receiver
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ScooterMessagingService.ACTION_NEW_SCOOTER);
         registerReceiver(newScooterReceiver, intentFilter);
+
+        // Configure List
+        mRecyclerScooters.setHasFixedSize(true);
+        mRecyclerScooters.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerScooters.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mAdapter = new ScooterListAdapter(this);
+        mRecyclerScooters.setAdapter(mAdapter);
 
         getToken();
     }
@@ -68,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
-                        mEditToken.setText(token);
 
                         // Log and toast
                         String msg = "Token: " + token;
@@ -80,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addScooter(Scooter scooter) {
-        Toast.makeText(this, "New Scooter " + scooter.code, Toast.LENGTH_LONG).show();
+        mTextWaiting.setVisibility(View.GONE);
+        mAdapter.addScooter(scooter);
+        mAdapter.notifyDataSetChanged();
     }
 }

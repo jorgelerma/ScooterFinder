@@ -7,14 +7,20 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
+    <!--Waiting-->
     <TextView
+        android:id="@+id/text_waiting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Token" />
+        android:text="Waiting for Scooters"
+        android:textAlignment="center" />
 
-    <EditText
-        android:id="@+id/edit_token"
+    <!--Scooters-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_scooters"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+
 
 </LinearLayout>
