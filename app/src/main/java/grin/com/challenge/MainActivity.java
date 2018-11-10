@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import grin.com.challenge.models.Scooter;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected BroadcastReceiver newScooterReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            addScooter();
+            Scooter scooter = intent.getParcelableExtra(ScooterMessagingService.EXTRA_SCOOTER);
+            addScooter(scooter);
         }
     };
 
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Subscribe to new Scooter receiver
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MyFirebaseMessagingService.ACTION_NEW_SCOOTER);
+        intentFilter.addAction(ScooterMessagingService.ACTION_NEW_SCOOTER);
         registerReceiver(newScooterReceiver, intentFilter);
 
         getToken();
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void addScooter() {
-        Toast.makeText(this, "New Scooter", Toast.LENGTH_LONG).show();
+    private void addScooter(Scooter scooter) {
+        Toast.makeText(this, "New Scooter " + scooter.code, Toast.LENGTH_LONG).show();
     }
 }

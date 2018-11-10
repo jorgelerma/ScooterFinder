@@ -10,8 +10,9 @@ import com.google.gson.Gson;
 import grin.com.challenge.models.Scooter;
 
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class ScooterMessagingService extends FirebaseMessagingService {
 
+    public static final String EXTRA_SCOOTER = "scooter";
     public static final String ACTION_NEW_SCOOTER = "com.grin.ACTION_NEW_SCOOTER";
 
     @Override
@@ -20,6 +21,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Scooter scooter = gson.fromJson(remoteMessage.getData().get("scooter"), Scooter.class);
 
         Intent broadcastIntent = new Intent();
+        broadcastIntent.putExtra(EXTRA_SCOOTER, scooter);
         broadcastIntent.setAction(ACTION_NEW_SCOOTER);
         sendBroadcast(broadcastIntent);
     }
