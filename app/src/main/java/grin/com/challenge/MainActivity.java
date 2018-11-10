@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerScooters.setAdapter(mAdapter);
 
         getToken();
+
+        ScooterNotificationService.setEnabled(this, true);
     }
 
 
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(newScooterReceiver);
+
+        ScooterNotificationService.setEnabled(this, false);
     }
 
 
