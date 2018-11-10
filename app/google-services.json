@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "928766359691",
+    "firebase_url": "https://challenge-c188b.firebaseio.com",
+    "project_id": "challenge-c188b",
+    "storage_bucket": "challenge-c188b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928766359691:android:eab7373c3de12442",
+        "android_client_info": {
+          "package_name": "grin.com.challenge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928766359691-clt9qqo6bgb5tbvuia7a3vt59b4h157n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1xb3Q1Z8xY-1wlPXzYuXh6Va2hLW84Fs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
