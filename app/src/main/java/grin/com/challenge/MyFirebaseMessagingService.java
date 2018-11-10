@@ -1,14 +1,27 @@
 package grin.com.challenge;
 
+import android.content.Intent;
+import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
+
+import grin.com.challenge.models.Scooter;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
+    public static final String ACTION_NEW_SCOOTER = "com.grin.ACTION_NEW_SCOOTER";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
+        Gson gson = new Gson();
+        Scooter scooter = gson.fromJson(remoteMessage.getData().get("scooter"), Scooter.class);
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(ACTION_NEW_SCOOTER);
+        sendBroadcast(broadcastIntent);
     }
 
     @Override

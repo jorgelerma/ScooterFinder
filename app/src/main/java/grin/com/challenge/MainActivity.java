@@ -1,5 +1,9 @@
 package grin.com.challenge;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +22,14 @@ public class MainActivity extends AppCompatActivity {
     private EditText mEditToken;
 
 
+    protected BroadcastReceiver newScooterReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            addScooter();
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +37,19 @@ public class MainActivity extends AppCompatActivity {
 
         mEditToken = findViewById(R.id.edit_token);
 
+        // Subscribe to new Scooter receiver
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MyFirebaseMessagingService.ACTION_NEW_SCOOTER);
+        registerReceiver(newScooterReceiver, intentFilter);
+
         getToken();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(newScooterReceiver);
     }
 
 
@@ -49,5 +73,10 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+
+    private void addScooter() {
+        Toast.makeText(this, "New Scooter", Toast.LENGTH_LONG).show();
     }
 }
