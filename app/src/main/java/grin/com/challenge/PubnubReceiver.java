@@ -25,6 +25,7 @@ public class PubnubReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ScooterNotificationService.reconnect(context);
+//        ScooterNotificationService.reconnect(context);
+        UsersNotificationService.reconnect(context);
     }
 }

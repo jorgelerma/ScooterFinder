@@ -22,20 +22,38 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import grin.com.challenge.adapters.ScooterListAdapter;
+import grin.com.challenge.adapters.UsersListAdapter;
+
 import grin.com.challenge.models.Scooter;
+import grin.com.challenge.models.Users;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextWaiting;
     private RecyclerView mRecyclerScooters;
+    private RecyclerView mRecyclerUsers;
     private ScooterListAdapter mAdapter;
+    private UsersListAdapter mUserAdapter;
 
     protected BroadcastReceiver newScooterReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Scooter scooter = intent.getParcelableExtra(ScooterMessagingService.EXTRA_SCOOTER);
             addScooter(scooter);
+
+
+        }
+    };
+
+
+    protected BroadcastReceiver newUserReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Users user = intent.getParcelableExtra(UsersNotificationService.EXTRA_USER);
+            addUser(user);
+
         }
     };
 
@@ -47,18 +65,26 @@ public class MainActivity extends AppCompatActivity {
 
         mTextWaiting = findViewById(R.id.text_waiting);
         mRecyclerScooters = findViewById(R.id.recycler_scooters);
+        mRecyclerUsers = findViewById(R.id.recycler_users);
 
         // Subscribe to new Scooter receiver
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ScooterMessagingService.ACTION_NEW_SCOOTER);
-        registerReceiver(newScooterReceiver, intentFilter);
+        intentFilter.addAction(UsersNotificationService.ACTION_NEW_USER);
+        registerReceiver(newUserReceiver, intentFilter);
 
         // Configure List
-        mRecyclerScooters.setHasFixedSize(true);
-        mRecyclerScooters.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerScooters.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        mAdapter = new ScooterListAdapter(this);
-        mRecyclerScooters.setAdapter(mAdapter);
+//        mRecyclerScooters.setHasFixedSize(true);
+//        mRecyclerScooters.setLayoutManager(new LinearLayoutManager(this));
+//        mRecyclerScooters.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+//        mAdapter = new ScooterListAdapter(this);
+//        mRecyclerScooters.setAdapter(mAdapter);
+
+        //Configure User List
+        mRecyclerUsers.setHasFixedSize(true);
+        mRecyclerUsers.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerUsers.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mUserAdapter = new UsersListAdapter(this);
+        mRecyclerUsers.setAdapter(mUserAdapter);
 
         getToken();
 
@@ -99,5 +125,11 @@ public class MainActivity extends AppCompatActivity {
         mTextWaiting.setVisibility(View.GONE);
         mAdapter.addScooter(scooter);
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void  addUser(Users user){
+        mTextWaiting.setVisibility(View.GONE);
+        mUserAdapter.addUser(user);
+        mUserAdapter.notifyDataSetChanged();
     }
 }

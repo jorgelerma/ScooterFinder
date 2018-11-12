@@ -24,7 +24,9 @@ import grin.com.challenge.models.Scooter;
 public class ScooterNotificationService extends Service {
 
     private static final String TAG = "CHALLENGE_EXTERNAL";
-    private static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-2b9f3e2a-e4c1-11e8-a679-1679df73129d";
+//    private static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-2b9f3e2a-e4c1-11e8-a679-1679df73129d";
+    private static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-845ceb46-e50e-11e8-a679-1679df73129d";
+
     private static final int NOTIFICATION_ID = 93845;
 
     public static final String EXTRA_SCOOTER = "scooter";
@@ -65,7 +67,9 @@ public class ScooterNotificationService extends Service {
 
         }
         Log.v(TAG, "Hash " + mPubnub.hashCode());
-        subscribeToNotificationProvider(getApplicationContext(), "channel_1");
+//        subscribeToNotificationProvider(getApplicationContext(), "channel_1");
+        subscribeToNotificationProvider(getApplicationContext(), "Channel-uneh5vbm0");
+
     }
 
 

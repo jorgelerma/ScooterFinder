@@ -15,6 +15,13 @@
         android:text="Waiting for Scooters"
         android:textAlignment="center" />
 
+    <!--Users-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_users"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+
     <!--Scooters-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_scooters"

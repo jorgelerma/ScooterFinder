@@ -1,6 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
-</android.support.constraint.ConstraintLayout>
+    <!--Id-->
+    <TextView
+        android:id="@+id/text_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="id" />
+
+    <!--Code-->
+    <TextView
+        android:id="@+id/text_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Code" />
+
+    <!--Battery-->
+    <TextView
+        android:id="@+id/text_battery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Battery" />
+
+    <TextView
+        android:id="@+id/text_lat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="latitude"
+        />
+
+    <TextView
+        android:id="@+id/text_long"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="longitude"
+        />
+
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="time"
+        />
+
+</LinearLayout>

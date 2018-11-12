@@ -27,6 +27,9 @@
         <service
             android:name=".ScooterNotificationService"
             android:exported="false" />
+        <service
+            android:name=".UsersNotificationService"
+            android:exported="false" />
         <receiver android:name=".PubnubReceiver" />
     </application>
 
